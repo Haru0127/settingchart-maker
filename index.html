@@ -70,7 +70,7 @@ const stg=document.getElementById('stg');
 function add(t,c,shape){
 const div=document.createElement('div');div.className='placed-item';div.style.left='180px';div.style.top='150px';
 const w=document.createElement('div');w.className='icon-w';const i=document.createElement('div');i.className='icon '+shape;let currentRotation=0;
-if(shape==='circle'||shape==='rect-black'||shape==='arrow-symbol'||shape==='text-only'){i.style.backgroundColor=(shape==='circle'||shape==='rect-black'?c:'transparent');i.textContent=(shape==='arrow-symbol'?'━━━━➡':t);}
+if(shape==='circle'||shape==='rect-black'||shape==='arrow-symbol'||shape==='text-only'){i.style.backgroundColor=(shape==='circle'||shape==='rect-black'?c:'transparent');i.textContent=(shape==='arrow-symbol'?'➡':t);}
 else if(shape==='rect-white'){i.style.borderColor=c;i.style.color=c;i.textContent=t;}
 else if(shape==='mic-symbol'){const nl=document.createElement('div');nl.className='mic-line';div.appendChild(nl);}
 const d=document.createElement('div');d.className='del';d.textContent='×';d.onclick=(e)=>{e.stopPropagation();div.remove();};w.appendChild(i);w.appendChild(d);
