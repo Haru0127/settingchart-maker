@@ -1,0 +1,92 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8"><title>ライブ・セッティング図メーカー</title>
+<style>
+:root{--p:#2563eb;--d:#1e293b;--l:#f8fafc;--b:#cbd5e1;}
+body{font-family:sans-serif;margin:0;padding:15px;background:#f1f5f9;color:var(--d);font-size:14px;}
+header{text-align:center;margin-bottom:10px;}
+.meta-inputs{display:flex;gap:10px;justify-content:center;margin-bottom:10px;}
+.meta-inputs input{padding:6px;border:1px solid var(--b);border-radius:6px;width:180px;}
+.main-container{display:flex;gap:15px;max-width:1000px;margin:0 auto;}
+.toolbox{width:160px;background:white;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1);align-self:flex-start;}
+.tool-item{display:flex;align-items:center;gap:8px;padding:6px;background:var(--l);border:1px solid var(--b);border-radius:6px;margin-bottom:6px;cursor:pointer;font-size:12px;}
+.icon-p{width:32px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;position:relative;}
+.stage-container{flex:1;display:flex;flex-direction:column;gap:10px;}
+.stage{height:380px;background:white;border:2px dashed #94a3b8;border-radius:8px;position:relative;overflow:hidden;}
+.stage::before{content:"【 客席側 (AUDIENCE) 】";position:absolute;bottom:8px;left:50%;transform:translateX(-50%);color:#94a3b8;font-weight:bold;font-size:12px;pointer-events:none;}
+.stage::after{content:"【 ステージ後方 】";position:absolute;top:8px;left:50%;transform:translateX(-50%);color:#94a3b8;font-weight:bold;font-size:12px;pointer-events:none;}
+.placed-item{position:absolute;display:flex;flex-direction:column;align-items:center;cursor:move;touch-action:none;z-index:10;user-select:none;}
+.icon-w{position:relative;}
+.icon{display:flex;align-items:center;justify-content:center;font-weight:bold;box-shadow:0 2px 4px rgba(0,0,0,0.12);text-align:center;}
+.icon.circle{width:36px;height:36px;border-radius:50%;color:white;font-size:13px;}
+.icon.rect-white{width:60px;height:32px;border-radius:4px;background:white;border:3px solid;box-sizing:border-box;font-size:12px;}
+.icon.rect-black{width:48px;height:24px;border-radius:2px;background:#000;color:white;font-size:11px;}
+.icon.arrow-symbol{width:40px;height:40px;box-shadow:none;font-size:28px;color:#475569;}
+.icon.text-only{width:70px;height:25px;box-shadow:none;background:transparent;font-size:13px;color:var(--d);}
+.icon.mic-symbol{width:34px;height:34px;background:transparent;position:relative;box-shadow:none;}
+.icon.mic-symbol::before{content:"";position:absolute;width:18px;height:18px;border:3px solid #475569;border-radius:50%;top:8px;box-sizing:border-box;}
+.icon.mic-symbol::after{content:"";position:absolute;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:8px solid #475569;top:1px;}
+.mic-line{position:absolute;width:3px;height:28px;background:#475569;top:6px;z-index:-1;}
+.del,.rot{position:absolute;width:15px;height:15px;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid white;font-weight:bold;z-index:20;}
+.del{top:-6px;right:-6px;background:#ef4444;color:white;}
+.rot{top:-6px;left:-6px;background:#10b981;color:white;}
+/* アイコン下の編集用文字を非表示化（ETCとテキストのみ編集ポップアップで対応） */
+.placed-item input{display:none;}
+.details-area{background:white;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
+.details-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.detail-box{border:1px solid var(--b);border-radius:6px;padding:6px;background:var(--l);}
+.detail-box label{font-size:12px;font-weight:bold;color:#475569;display:block;margin-bottom:4px;}
+.detail-box textarea{width:100%;height:38px;border:1px solid #e2e8f0;border-radius:4px;resize:none;font-size:11px;padding:4px;box-sizing:border-box;}
+.actions{display:flex;justify-content:flex-end;}
+.btn{background:var(--p);color:white;border:none;padding:8px 16px;font-size:14px;font-weight:bold;border-radius:6px;cursor:pointer;}
+@media print{@page{size:A4 portrait;margin:10mm;}body{background:white;padding:0;font-size:12px;}.toolbox,.actions,.del,.rot{display:none!important;}.main-container{display:block;}.stage{border:2px solid var(--d);height:420px;margin-bottom:10px;}.meta-inputs input{border:none;font-size:14px;font-weight:bold;padding:0;}.details-area{box-shadow:none;padding:0;}.details-grid{grid-template-columns:repeat(2,1fr);gap:8px;}.detail-box{background:white;border:1px solid #94a3b8;page-break-inside:avoid;}.detail-box textarea{border:none;height:40px;padding:0;}}
+</style></head><body>
+<header><h1>🎸 ライブ・セッティング図メーカー</h1>
+<div class="meta-inputs"><input type="text" placeholder="バンド名"><input type="text" placeholder="出演日 / イベント名"></div></header>
+<div class="main-container">
+<div class="toolbox"><h3>機材・演者</h3><p style="font-size:10px;color:#64748b;margin:0 0 6px 0;">💡 クリックで追加</p>
+<div class="tool-item" onclick="add('Vo','#ef4444','circle')"><div class="icon-p" style="background:#ef4444;color:white;border-radius:50%;width:20px;height:20px;">Vo</div><span>ボーカル</span></div>
+<div class="tool-item" onclick="add('Gt1','#3b82f6','rect-white')"><div class="icon-p" style="background:white;color:#3b82f6;border:2px solid #3b82f6;">Gt1</div><span>ギター1</span></div>
+<div class="tool-item" onclick="add('Gt2','#2563eb','rect-white')"><div class="icon-p" style="background:white;color:#2563eb;border:2px solid #2563eb;">Gt2</div><span>ギター2</span></div>
+<div class="tool-item" onclick="add('Ba','#10b981','rect-white')"><div class="icon-p" style="background:white;color:#10b981;border:2px solid #10b981;">Ba</div><span>ベース</span></div>
+<div class="tool-item" onclick="add('Dr','#f59e0b','rect-white')"><div class="icon-p" style="background:white;color:#f59e0b;border:2px solid #f59e0b;">Dr</div><span>ドラム一式</span></div>
+<div class="tool-item" onclick="add('Key','#8b5cf6','rect-white')"><div class="icon-p" style="background:white;color:#8b5cf6;border:2px solid #8b5cf6;">Key</div><span>キーボード</span></div>
+<div class="tool-item" onclick="add('Mic','#475569','mic-symbol')"><div class="icon-p mic-symbol" style="transform:scale(0.6);width:20px;height:20px;"><div class="mic-line"></div></div><span>マイク</span></div>
+<div class="tool-item" onclick="add('Mon','#000000','rect-black')"><div class="icon-p" style="background:#000;color:white;height:16px;">Mon</div><span>モニター</span></div>
+<div class="tool-item" onclick="add('ETC','#64748b','rect-white')"><div class="icon-p" style="background:white;color:#64748b;border:2px solid #64748b;">ETC</div><span>その他(自由)</span></div>
+<div class="tool-item" onclick="add('➡','#475569','arrow-symbol')"><div class="icon-p" style="font-size:14px;">➡</div><span>矢印</span></div>
+<div class="tool-item" onclick="add('テキスト','#475569','text-only')"><div class="icon-p" style="background:transparent;border:1px dashed #64748b;font-size:10px;">TEXT</div><span>📝 テキストのみ</span></div></div>
+<div class="stage-container"><div class="stage" id="stg"></div>
+<div class="details-area"><h3>📋 各パート詳細情報</h3>
+<div class="details-grid">
+<div class="detail-box"><label>【Vocal】</label><textarea placeholder="例：マイク持ち込み(Beta58)、スタンド不要 等"></textarea></div>
+<div class="detail-box"><label>【Guitar 1】</label><textarea placeholder="例：JC-120使用、無線使用　等"></textarea></div>
+<div class="detail-box"><label>【Guitar 2】</label><textarea placeholder="例：JCM900使用、エフェクター用電源1系統希望 等"></textarea></div>
+<div class="detail-box"><label>【Bass】</label><textarea placeholder="例：アンプヘッド持ち込み、DIアウトと併用 等"></textarea></div>
+<div class="detail-box"><label>【Drums】</label><textarea placeholder="例：チャイナシンバル1枚追加、スネア持ち込み 等"></textarea></div>
+<div class="detail-box"><label>【Keyboard / その他】</label><textarea placeholder="例：DI 2系統(L/R)希望、ステレオ出力 等"></textarea></div>
+</div></div>
+<div class="actions"><button class="btn" onclick="window.print()">📄 PDF保存 / 印刷</button></div></div></div>
+<script>
+const stg=document.getElementById('stg');
+function add(t,c,shape){
+const div=document.createElement('div');div.className='placed-item';div.style.left='180px';div.style.top='150px';
+const w=document.createElement('div');w.className='icon-w';const i=document.createElement('div');i.className='icon '+shape;let currentRotation=0;
+if(shape==='circle'||shape==='rect-black'||shape==='arrow-symbol'||shape==='text-only'){i.style.backgroundColor=(shape==='circle'||shape==='rect-black'?c:'transparent');i.textContent=(shape==='arrow-symbol'?'━━━━➡':t);}
+else if(shape==='rect-white'){i.style.borderColor=c;i.style.color=c;i.textContent=t;}
+else if(shape==='mic-symbol'){const nl=document.createElement('div');nl.className='mic-line';div.appendChild(nl);}
+const d=document.createElement('div');d.className='del';d.textContent='×';d.onclick=(e)=>{e.stopPropagation();div.remove();};w.appendChild(i);w.appendChild(d);
+if(shape!=='circle'){
+const r=document.createElement('div');r.className='rot';r.textContent='🔄';r.onclick=(e)=>{e.stopPropagation();currentRotation=(currentRotation+90)%360;i.style.transform=`rotate(${currentRotation}deg)`;};w.appendChild(r);
+}
+if(shape==='rect-white'||shape==='text-only'){
+div.style.cursor='pointer';
+div.ondblclick=(e)=>{e.stopPropagation();const newTxt=prompt('機材名やテキストを入力してください：',i.textContent);if(newTxt!==null&&newTxt.trim()!==""){i.textContent=newTxt;}};
+}
+w.appendChild(i);w.appendChild(d);div.appendChild(w);stg.appendChild(div);
+let drag=false,sx,sy;
+function start(e){if(e.target.className==='del'||e.target.className==='rot')return;drag=true;const cv=e.touches?e.touches[0]:e;sx=cv.clientX-div.offsetLeft;sy=cv.clientY-div.offsetTop;div.style.zIndex=1000;}
+function move(e){if(!drag)return;e.preventDefault();const cv=e.touches?e.touches[0]:e;let x=cv.clientX-sx,y=cv.clientY-sy;const r=stg.getBoundingClientRect();x=Math.max(0,Math.min(x,r.width-div.offsetWidth));y=Math.max(0,Math.min(y,r.height-div.offsetHeight));div.style.left=x+'px';div.style.top=y+'px';}
+function end(){drag=false;div.style.zIndex=10;}
+div.addEventListener('mousedown',start);document.addEventListener('mousemove',move);document.addEventListener('mouseup',end);
+div.addEventListener('touchstart',start,{passive:false});document.addEventListener('touchmove',move,{passive:false});document.addEventListener('touchend',end);
+}
+</script></body></html>
