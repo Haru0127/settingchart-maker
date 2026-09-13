@@ -21,10 +21,10 @@ header{text-align:center;margin-bottom:10px;}
 .icon.rect-black{width:48px;height:24px;border-radius:2px;background:#000;color:white;font-size:11px;}
 .icon.arrow-symbol{width:40px;height:40px;box-shadow:none;font-size:28px;color:#475569;}
 .icon.text-only{width:70px;height:25px;box-shadow:none;background:transparent;font-size:13px;color:var(--d);}
-.icon.mic-symbol{width:34px;height:34px;background:transparent;position:relative;box-shadow:none;}
-.icon.mic-symbol::before{content:"";position:absolute;width:18px;height:18px;border:3px solid #475569;border-radius:50%;top:8px;box-sizing:border-box;}
-.icon.mic-symbol::after{content:"";position:absolute;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:8px solid #475569;top:1px;}
-.mic-line{position:absolute;width:3px;height:28px;background:#475569;top:6px;z-index:-1;}
+.icon.mic-symbol{width:40px;height:40px;background:transparent;position:relative;box-shadow:none;display:flex;justify-content:center;align-items:center;}
+.icon.mic-symbol::before{content:"";position:absolute;width:20px;height:20px;border:3px solid #475569;border-radius:50%;top:12px;box-sizing:border-box;background:white;}
+.icon.mic-symbol::after{content:"";position:absolute;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:8px solid #475569;top:2px;}
+.mic-line{position:absolute;width:3px;height:32px;background:#475569;top:6px;z-index:-1;left:50%;transform:translateX(-50%);}
 .del,.rot,.edt{position:absolute;width:15px;height:15px;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid white;font-weight:bold;z-index:20;}
 .del{top:-6px;right:-6px;background:#ef4444;color:white;}
 .rot{top:-6px;left:-6px;background:#10b981;color:white;}
