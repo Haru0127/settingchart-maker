@@ -24,7 +24,7 @@ header{text-align:center;margin-bottom:10px;}
 .icon.mic-symbol{width:40px;height:40px;background:transparent;position:relative;box-shadow:none;display:flex;justify-content:center;align-items:center;}
 .icon.mic-symbol::before{content:"";position:absolute;width:20px;height:20px;border:3px solid #475569;border-radius:50%;top:12px;box-sizing:border-box;background:white;}
 .icon.mic-symbol::after{content:"";position:absolute;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:8px solid #475569;top:2px;}
-.mic-line{position:absolute;width:3px;height:32px;background:#475569;top:6px;z-index:-1;left:50%;transform:translateX(-50%);}
+.mic-line{position:absolute;width:0;border-left:3px solid #475569;height:32px;top:6px;z-index:-1;left:50%;transform:translateX(-50%);}
 .del,.rot,.edt{position:absolute;width:15px;height:15px;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid white;font-weight:bold;z-index:20;}
 .del{top:-6px;right:-6px;background:#ef4444;color:white;}
 .rot{top:-6px;left:-6px;background:#10b981;color:white;}
@@ -38,7 +38,7 @@ header{text-align:center;margin-bottom:10px;}
 .detail-box textarea{width:100%;height:38px;border:1px solid #e2e8f0;border-radius:4px;resize:none;font-size:11px;padding:4px;box-sizing:border-box;}
 .actions{display:flex;justify-content:flex-end;}
 .btn{background:var(--p);color:white;border:none;padding:8px 16px;font-size:14px;font-weight:bold;border-radius:6px;cursor:pointer;}
-@media print{@page{size:A4 portrait;margin:10mm;}body{background:white;padding:0;font-size:12px;}.toolbox,.actions,.del,.rot,.edt{display:none!important;}.main-container{display:block;}.stage{border:2px solid var(--d);height:420px;margin-bottom:10px;}.meta-inputs input{border:none;font-size:14px;font-weight:bold;padding:0;}.details-area{box-shadow:none;padding:0;}.details-grid{grid-template-columns:repeat(2,1fr);gap:8px;}.detail-box{background:white;border:1px solid #94a3b8;page-break-inside:avoid;}.detail-box textarea{border:none;height:40px;padding:0;}}
+@media print{@page{size:A4 portrait;margin:10mm;}body{background:white;padding:0;font-size:12px;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}.toolbox,.actions,.del,.rot,.edt{display:none!important;}.main-container{display:block;}.stage{border:2px solid var(--d);height:420px;margin-bottom:10px;}.meta-inputs input{border:none;font-size:14px;font-weight:bold;padding:0;}.details-area{box-shadow:none;padding:0;}.details-grid{grid-template-columns:repeat(2,1fr);gap:8px;}.detail-box{background:white;border:1px solid #94a3b8;page-break-inside:avoid;}.detail-box textarea{border:none;height:40px;padding:0;}}
 </style></head><body>
 <header><h1>🎸 ライブ・セッティング図メーカー</h1>
 <div class="meta-inputs"><input type="text" placeholder="バンド名"><input type="text" placeholder="出演日 / イベント名"></div></header>
