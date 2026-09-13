@@ -25,10 +25,11 @@ header{text-align:center;margin-bottom:10px;}
 .icon.mic-symbol::before{content:"";position:absolute;width:18px;height:18px;border:3px solid #475569;border-radius:50%;top:8px;box-sizing:border-box;}
 .icon.mic-symbol::after{content:"";position:absolute;width:0;height:0;border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:8px solid #475569;top:1px;}
 .mic-line{position:absolute;width:3px;height:28px;background:#475569;top:6px;z-index:-1;}
-.del,.rot{position:absolute;width:15px;height:15px;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid white;font-weight:bold;z-index:20;}
+.del,.rot,.edt{position:absolute;width:15px;height:15px;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid white;font-weight:bold;z-index:20;}
 .del{top:-6px;right:-6px;background:#ef4444;color:white;}
 .rot{top:-6px;left:-6px;background:#10b981;color:white;}
-/* アイコン下の編集用文字を非表示化（ETCとテキストのみ編集ポップアップで対応） */
+/* 追加した編集用ボタン（鉛筆）のスタイル */
+.edt{bottom:-6px;right:-6px;background:#f59e0b;color:white;font-size:8px;}
 .placed-item input{display:none;}
 .details-area{background:white;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
 .details-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
@@ -37,7 +38,7 @@ header{text-align:center;margin-bottom:10px;}
 .detail-box textarea{width:100%;height:38px;border:1px solid #e2e8f0;border-radius:4px;resize:none;font-size:11px;padding:4px;box-sizing:border-box;}
 .actions{display:flex;justify-content:flex-end;}
 .btn{background:var(--p);color:white;border:none;padding:8px 16px;font-size:14px;font-weight:bold;border-radius:6px;cursor:pointer;}
-@media print{@page{size:A4 portrait;margin:10mm;}body{background:white;padding:0;font-size:12px;}.toolbox,.actions,.del,.rot{display:none!important;}.main-container{display:block;}.stage{border:2px solid var(--d);height:420px;margin-bottom:10px;}.meta-inputs input{border:none;font-size:14px;font-weight:bold;padding:0;}.details-area{box-shadow:none;padding:0;}.details-grid{grid-template-columns:repeat(2,1fr);gap:8px;}.detail-box{background:white;border:1px solid #94a3b8;page-break-inside:avoid;}.detail-box textarea{border:none;height:40px;padding:0;}}
+@media print{@page{size:A4 portrait;margin:10mm;}body{background:white;padding:0;font-size:12px;}.toolbox,.actions,.del,.rot,.edt{display:none!important;}.main-container{display:block;}.stage{border:2px solid var(--d);height:420px;margin-bottom:10px;}.meta-inputs input{border:none;font-size:14px;font-weight:bold;padding:0;}.details-area{box-shadow:none;padding:0;}.details-grid{grid-template-columns:repeat(2,1fr);gap:8px;}.detail-box{background:white;border:1px solid #94a3b8;page-break-inside:avoid;}.detail-box textarea{border:none;height:40px;padding:0;}}
 </style></head><body>
 <header><h1>🎸 ライブ・セッティング図メーカー</h1>
 <div class="meta-inputs"><input type="text" placeholder="バンド名"><input type="text" placeholder="出演日 / イベント名"></div></header>
@@ -72,19 +73,20 @@ const div=document.createElement('div');div.className='placed-item';div.style.le
 const w=document.createElement('div');w.className='icon-w';const i=document.createElement('div');i.className='icon '+shape;let currentRotation=0;
 if(shape==='circle'||shape==='rect-black'||shape==='arrow-symbol'||shape==='text-only'){i.style.backgroundColor=(shape==='circle'||shape==='rect-black'?c:'transparent');i.textContent=(shape==='arrow-symbol'?'➡':t);}
 else if(shape==='rect-white'){i.style.borderColor=c;i.style.color=c;i.textContent=t;}
-else if(shape==='mic-symbol'){const nl=document.createElement('div');nl.className='mic-line';div.appendChild(nl);}
+else if(shape==='mic-symbol'){const nl=document.createElement('div');nl.className='mic-line';w.appendChild(nl);}
 const d=document.createElement('div');d.className='del';d.textContent='×';d.onclick=(e)=>{e.stopPropagation();div.remove();};w.appendChild(i);w.appendChild(d);
 if(shape!=='circle'){
 const r=document.createElement('div');r.className='rot';r.textContent='🔄';r.onclick=(e)=>{e.stopPropagation();currentRotation=(currentRotation+90)%360;i.style.transform=`rotate(${currentRotation}deg)`;};w.appendChild(r);
 }
 if(shape==='rect-white'||shape==='text-only'){
-div.style.cursor='pointer';
-div.ondblclick=(e)=>{e.stopPropagation();const newTxt=prompt('機材名やテキストを入力してください：',i.textContent);if(newTxt!==null&&newTxt.trim()!==""){i.textContent=newTxt;}};
+const eBtn=document.createElement('div');eBtn.className='edt';eBtn.textContent='✏️';
+eBtn.onclick=(e)=>{e.stopPropagation();const newTxt=prompt('機材名やテキストを入力してください：',i.textContent);if(newTxt!==null&&newTxt.trim()!==""){i.textContent=newTxt;}};
+w.appendChild(eBtn);
 }
 w.appendChild(i);w.appendChild(d);div.appendChild(w);stg.appendChild(div);
 let drag=false,sx,sy;
-function start(e){if(e.target.className==='del'||e.target.className==='rot')return;drag=true;const cv=e.touches?e.touches[0]:e;sx=cv.clientX-div.offsetLeft;sy=cv.clientY-div.offsetTop;div.style.zIndex=1000;}
-function move(e){if(!drag)return;e.preventDefault();const cv=e.touches?e.touches[0]:e;let x=cv.clientX-sx,y=cv.clientY-sy;const r=stg.getBoundingClientRect();x=Math.max(0,Math.min(x,r.width-div.offsetWidth));y=Math.max(0,Math.min(y,r.height-div.offsetHeight));div.style.left=x+'px';div.style.top=y+'px';}
+function start(e){if(e.target.className==='del'||e.target.className==='rot'||e.target.className==='edt')return;drag=true;const cv=e.touches?e.touches:e;sx=cv.clientX-div.offsetLeft;sy=cv.clientY-div.offsetTop;div.style.zIndex=1000;}
+function move(e){if(!drag)return;e.preventDefault();const cv=e.touches?e.touches:e;let x=cv.clientX-sx,y=cv.clientY-sy;const r=stg.getBoundingClientRect();x=Math.max(0,Math.min(x,r.width-div.offsetWidth));y=Math.max(0,Math.min(y,r.height-div.offsetHeight));div.style.left=x+'px';div.style.top=y+'px';}
 function end(){drag=false;div.style.zIndex=10;}
 div.addEventListener('mousedown',start);document.addEventListener('mousemove',move);document.addEventListener('mouseup',end);
 div.addEventListener('touchstart',start,{passive:false});document.addEventListener('touchmove',move,{passive:false});document.addEventListener('touchend',end);
