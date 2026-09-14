@@ -38,7 +38,7 @@ header{text-align:center;margin-bottom:10px;}
 .detail-box textarea{width:100%;height:38px;border:1px solid #e2e8f0;border-radius:4px;resize:none;font-size:11px;padding:4px;box-sizing:border-box;}
 .actions{display:flex;justify-content:flex-end;}
 .btn{background:var(--p);color:white;border:none;padding:8px 16px;font-size:14px;font-weight:bold;border-radius:6px;cursor:pointer;}
-@media print{@page{size:A4 portrait;margin:10mm;}body{background:white;padding:0;font-size:12px;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}.toolbox,.actions,.del,.rot,.edt{display:none!important;}.main-container{display:block;}.stage{border:2px solid var(--d);height:420px;margin-bottom:10px;}.meta-inputs input{border:none;font-size:14px;font-weight:bold;padding:0;}.details-area{box-shadow:none;padding:0;}.details-grid{grid-template-columns:repeat(2,1fr);gap:8px;}.detail-box{background:white;border:1px solid #94a3b8;page-break-inside:avoid;}.detail-box textarea{border:none;height:40px;padding:0;}}
+@media print{@page{size:A4 portrait;margin:10mm;}body{background:white;padding:0;font-size:12px;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}.toolbox,.actions,.del,.rot,.edt{display:none!important;}.main-container{display:block;width:100%;}.stage-container{width:100%;}.stage{border:2px solid var(--d);height:420px;margin-bottom:10px;width:100%;position:relative;box-sizing:border-box;}/* ★印刷時にアイコンの位置を左へ40px強制補正してズレを相殺★ */.placed-item{transform:translateX(-40px)!important;}.meta-inputs input{border:none;font-size:14px;font-weight:bold;padding:0;}.details-area{box-shadow:none;padding:0;width:100%;}.details-grid{grid-template-columns:repeat(2,1fr);gap:8px;}.detail-box{background:white;border:1px solid #94a3b8;page-break-inside:avoid;}.detail-box textarea{border:none;height:40px;padding:0;}}
 </style></head><body>
 <header><h1>🎸 ライブ・セッティング図メーカー</h1>
 <div class="meta-inputs"><input type="text" placeholder="バンド名"><input type="text" placeholder="出演日 / イベント名"></div></header>
@@ -83,10 +83,21 @@ const eBtn=document.createElement('div');eBtn.className='edt';eBtn.textContent='
 eBtn.onclick=(e)=>{e.stopPropagation();const newTxt=prompt('機材名やテキストを入力してください：',i.textContent);if(newTxt!==null&&newTxt.trim()!==""){i.textContent=newTxt;}};
 w.appendChild(eBtn);
 }
+
+/* ★★★ ここからサイズを楽器ごとに自動調整する処理 ★★★ */
+if(t==='Dr'){
+i.style.width='90px';i.style.height='48px';i.style.fontSize='14px';i.style.borderWidth='4px';
+}else if(t==='Gt1'||t==='Gt2'||t==='Ba'){
+i.style.width='75px';i.style.height='40px';i.style.fontSize='13px';i.style.borderWidth='3.5px';
+}else if(t==='Key'){
+i.style.width='75px';i.style.height='32px';i.style.fontSize='12px';i.style.borderWidth='3px';
+}
+/* ★★★ ここまで ★★★ */
+
 w.appendChild(i);w.appendChild(d);div.appendChild(w);stg.appendChild(div);
 let drag=false,sx,sy;
-function start(e){if(e.target.className==='del'||e.target.className==='rot'||e.target.className==='edt')return;drag=true;const cv=e.touches?e.touches[0]:e;sx=cv.clientX-div.offsetLeft;sy=cv.clientY-div.offsetTop;div.style.zIndex=1000;}
-function move(e){if(!drag)return;const cv=e.touches?e.touches[0]:e;let x=cv.clientX-sx,y=cv.clientY-sy;const r=stg.getBoundingClientRect();x=Math.max(0,Math.min(x,r.width-div.offsetWidth));y=Math.max(0,Math.min(y,r.height-div.offsetHeight));div.style.left=x+'px';div.style.top=y+'px';}
+function start(e){if(e.target.className==='del'||e.target.className==='rot'||e.target.className==='edt')return;drag=true;const cv=e.touches?e.touches:e;sx=cv.clientX-div.offsetLeft;sy=cv.clientY-div.offsetTop;div.style.zIndex=1000;}
+function move(e){if(!drag)return;const cv=e.touches?e.touches:e;let x=cv.clientX-sx,y=cv.clientY-sy;const r=stg.getBoundingClientRect();x=Math.max(0,Math.min(x,r.width-div.offsetWidth));y=Math.max(0,Math.min(y,r.height-div.offsetHeight));div.style.left=x+'px';div.style.top=y+'px';}
 function end(){drag=false;div.style.zIndex=10;}
 div.addEventListener('mousedown',start);document.addEventListener('mousemove',move);document.addEventListener('mouseup',end);
 div.addEventListener('touchstart',start,{passive:true});
@@ -94,3 +105,4 @@ div.addEventListener('touchmove',(e)=>{if(drag){e.preventDefault();move(e);}},{p
 div.addEventListener('touchend',end);
 }
 </script></body></html>
+
