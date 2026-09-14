@@ -62,19 +62,18 @@ header{text-align:center;margin-bottom:10px;}
 <div class="stage-container"><div class="stage" id="stg"></div>
 <div class="details-area"><h3>📋 各パート詳細情報</h3>
 <div class="details-grid">
-<div class="detail-box"><label>【Vocal】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
-<div class="detail-box"><label>【Guitar 1】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
-<div class="detail-box"><label>【Guitar 2】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
-<div class="detail-box"><label>【Bass】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
-<div class="detail-box"><label>【Drums】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
-<div class="detail-box"><label>【Keyboard / その他】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
+<div class="detail-box"><label>【Vocal】</label><textarea placeholder="例：マイク持ち込み(Beta58)、スタンド不要 等"></textarea></div>
+<div class="detail-box"><label>【Guitar 1】</label><textarea placeholder="例：JC-120使用、無線使用　等"></textarea></div>
+<div class="detail-box"><label>【Guitar 2】</label><textarea placeholder="JCM900使用、エフェクター用電源1系統希望 等"></textarea></div>
+<div class="detail-box"><label>【Bass】</label><textarea placeholder="例：アンプヘッド持ち込み、DIアウトと併用 等"></textarea></div>
+<div class="detail-box"><label>【Drums】</label><textarea placeholder="例：チャイナシンバル1枚追加、スネア持ち込み 等"></textarea></div>
+<div class="detail-box"><label>【Keyboard / その他】</label><textarea placeholder="例：DI 2系統(L/R)希望、ステレオ出力 等"></textarea></div>
 </div></div>
 <div class="actions"><button class="btn" onclick="window.print()">📄 PDF保存 / 印刷</button></div></div></div>
 <script>
 const stg=document.getElementById('stg');
 function add(t,c,shape){
 const div=document.createElement('div');div.className='placed-item';
-/* 初期配置を常に幅700pxのステージの中央付近（横320px、縦150px）に完全固定 */
 div.style.left='320px';div.style.top='150px';
 const w=document.createElement('div');w.className='icon-w';const i=document.createElement('div');i.className='icon '+shape;let currentRotation=0;
 if(shape==='circle'||shape==='rect-black'||shape==='arrow-symbol'||shape==='text-only'){i.style.backgroundColor=(shape==='circle'||shape==='rect-black'?c:'transparent');i.textContent=(shape==='arrow-symbol'?'➡':t);}
@@ -98,12 +97,23 @@ i.style.width='75px';i.style.height='32px';i.style.fontSize='12px';i.style.borde
 }
 w.appendChild(i);w.appendChild(d);div.appendChild(w);stg.appendChild(div);
 let drag=false,sx,sy;
-function start(e){if(e.target.className==='del'||e.target.className==='rot'||e.target.className==='edt')return;drag=true;const cv=e.touches?e.touches:e;sx=cv.clientX-div.offsetLeft;sy=cv.clientY-div.offsetTop;div.style.zIndex=1000;}
-function move(e){if(!drag)return;const cv=e.touches?e.touches:e;let x=cv.clientX-sx,y=cv.clientY-sy;const r=stg.getBoundingClientRect();x=Math.max(0,Math.min(x,r.width-div.offsetWidth));y=Math.max(0,Math.min(y,r.height-div.offsetHeight));div.style.left=x+'px';div.style.top=y+'px';}
+function start(e){if(e.target.className==='del'||e.target.className==='rot'||e.target.className==='edt')return;drag=true;const cv=e.touches?e.touches[0]:e;sx=cv.clientX-div.offsetLeft;sy=cv.clientY-div.offsetTop;div.style.zIndex=1000;}
+function move(e){if(!drag)return;const cv=e.touches?e.touches[0]:e;let x=cv.clientX-sx,y=cv.clientY-sy;const r=stg.getBoundingClientRect();x=Math.max(0,Math.min(x,r.width-div.offsetWidth));y=Math.max(0,Math.min(y,r.height-div.offsetHeight));div.style.left=x+'px';div.style.top=y+'px';}
 function end(){drag=false;div.style.zIndex=10;}
+
+// マウスイベント
 div.addEventListener('mousedown',start);document.addEventListener('mousemove',move);document.addEventListener('mouseup',end);
+
+// タッチイベントの競合を完全に排除する処理
 div.addEventListener('touchstart',start,{passive:true});
-div.addEventListener('touchmove',(e)=>{if(drag){e.preventDefault();move(e);}},{passive:false});
+div.addEventListener('touchmove',(e)=>{
+if(drag){
+if(e.cancelable){e.preventDefault();} // ブラウザのスクロール動作を強制停止
+e.stopPropagation(); // 親要素のスクロール発火を防ぐ
+move(e);
+}
+},{passive:false});
 div.addEventListener('touchend',end);
+div.addEventListener('touchcancel',end);
 }
 </script></body></html>
