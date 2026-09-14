@@ -5,12 +5,13 @@ body{font-family:sans-serif;margin:0;padding:15px;background:#f1f5f9;color:var(-
 header{text-align:center;margin-bottom:10px;}
 .meta-inputs{display:flex;gap:10px;justify-content:center;margin-bottom:10px;}
 .meta-inputs input{padding:6px;border:1px solid var(--b);border-radius:6px;width:180px;}
-.main-container{display:flex;gap:15px;max-width:1000px;margin:0 auto;}
+.main-container{display:flex;gap:15px;max-width:900px;margin:0 auto;width:100%;}
 .toolbox{width:160px;background:white;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1);align-self:flex-start;}
 .tool-item{display:flex;align-items:center;gap:8px;padding:6px;background:var(--l);border:1px solid var(--b);border-radius:6px;margin-bottom:6px;cursor:pointer;font-size:12px;}
 .icon-p{width:32px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:bold;position:relative;}
-.stage-container{flex:1;display:flex;flex-direction:column;gap:10px;}
-.stage{height:380px;background:white;border:2px dashed #94a3b8;border-radius:8px;position:relative;overflow:hidden;}
+.stage-container{flex:1;display:flex;flex-direction:column;gap:10px;overflow-x:auto;}
+/* ★ステージの横幅を画面上でも700pxに固定してズレを根本排除★ */
+.stage{height:380px;width:700px;background:white;border:2px dashed #94a3b8;border-radius:8px;position:relative;overflow:hidden;box-sizing:border-box;}
 .stage::before{content:"【 客席側 (AUDIENCE) 】";position:absolute;bottom:8px;left:50%;transform:translateX(-50%);color:#94a3b8;font-weight:bold;font-size:12px;pointer-events:none;}
 .stage::after{content:"【 ステージ後方 】";position:absolute;top:8px;left:50%;transform:translateX(-50%);color:#94a3b8;font-weight:bold;font-size:12px;pointer-events:none;}
 .placed-item{position:absolute;display:flex;flex-direction:column;align-items:center;cursor:move;touch-action:none;z-index:10;user-select:none;}
@@ -28,17 +29,20 @@ header{text-align:center;margin-bottom:10px;}
 .del,.rot,.edt{position:absolute;width:15px;height:15px;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:1px solid white;font-weight:bold;z-index:20;}
 .del{top:-6px;right:-6px;background:#ef4444;color:white;}
 .rot{top:-6px;left:-6px;background:#10b981;color:white;}
-/* 追加した編集用ボタン（鉛筆）のスタイル */
 .edt{bottom:-6px;right:-6px;background:#f59e0b;color:white;font-size:8px;}
 .placed-item input{display:none;}
-.details-area{background:white;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1);}
+/* パート詳細エリアも幅を700pxに統一 */
+.details-area{background:white;padding:12px;border-radius:8px;box-shadow:0 1px 3px rgba(0,0,0,0.1);width:700px;box-sizing:border-box;}
 .details-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
 .detail-box{border:1px solid var(--b);border-radius:6px;padding:6px;background:var(--l);}
 .detail-box label{font-size:12px;font-weight:bold;color:#475569;display:block;margin-bottom:4px;}
 .detail-box textarea{width:100%;height:38px;border:1px solid #e2e8f0;border-radius:4px;resize:none;font-size:11px;padding:4px;box-sizing:border-box;}
-.actions{display:flex;justify-content:flex-end;}
+.actions{display:flex;justify-content:flex-end;width:700px;}
 .btn{background:var(--p);color:white;border:none;padding:8px 16px;font-size:14px;font-weight:bold;border-radius:6px;cursor:pointer;}
-@media print{@page{size:A4 portrait;margin:10mm;}body{background:white;padding:0;font-size:12px;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}.toolbox,.actions,.del,.rot,.edt{display:none!important;}.main-container{display:block;width:100%;}.stage-container{width:100%;}.stage{border:2px solid var(--d);height:420px;margin-bottom:10px;width:100%;position:relative;box-sizing:border-box;}/* ★印刷時にアイコンの位置を左へ40px強制補正してズレを相殺★ */.placed-item{transform:translateX(-40px)!important;}.meta-inputs input{border:none;font-size:14px;font-weight:bold;padding:0;}.details-area{box-shadow:none;padding:0;width:100%;}.details-grid{grid-template-columns:repeat(2,1fr);gap:8px;}.detail-box{background:white;border:1px solid #94a3b8;page-break-inside:avoid;}.detail-box textarea{border:none;height:40px;padding:0;}}
+/* ★印刷・PDF設定を完全固定化してPC・スマホ両方のズレを100%解消★ */
+@media print{@page{size:A4 portrait;margin:10mm;}body{background:white;padding:0;font-size:12px;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}.toolbox,.actions,.del,.rot,.edt{display:none!important;}.main-container{display:block;width:700px;margin:0 auto;}.stage-container{width:700px;overflow:visible;}.stage{border:2px solid var(--d);height:420px;margin-bottom:10px;width:700px!important;position:relative;box-sizing:border-box;}.details-area{box-shadow:none;padding:0;width:700px!important;}.details-grid{grid-template-columns:repeat(2,1fr);gap:8px;}.detail-box{background:white;border:1px solid #94a3b8;page-break-inside:avoid;}.detail-box textarea{border:none;height:40px;padding:0;}}
+/* スマホ画面表示時のみ横スクロールで快適に見られるように調整 */
+@media screen and (max-width:768px){.main-container{flex-direction:column;}.stage-container,.details-area,.actions{width:100%;}}
 </style></head><body>
 <header><h1>🎸 ライブ・セッティング図メーカー</h1>
 <div class="meta-inputs"><input type="text" placeholder="バンド名"><input type="text" placeholder="出演日 / イベント名"></div></header>
@@ -58,18 +62,20 @@ header{text-align:center;margin-bottom:10px;}
 <div class="stage-container"><div class="stage" id="stg"></div>
 <div class="details-area"><h3>📋 各パート詳細情報</h3>
 <div class="details-grid">
-<div class="detail-box"><label>【Vocal】</label><textarea placeholder="例：マイク持ち込み(Beta58)、スタンド不要 等"></textarea></div>
-<div class="detail-box"><label>【Guitar 1】</label><textarea placeholder="例：JC-120使用、無線使用　等"></textarea></div>
-<div class="detail-box"><label>【Guitar 2】</label><textarea placeholder="JCM900使用、エフェクター用電源1系統希望 等"></textarea></div>
-<div class="detail-box"><label>【Bass】</label><textarea placeholder="例：アンプヘッド持ち込み、DIアウトと併用 等"></textarea></div>
-<div class="detail-box"><label>【Drums】</label><textarea placeholder="例：チャイナシンバル1枚追加、スネア持ち込み 等"></textarea></div>
-<div class="detail-box"><label>【Keyboard / その他】</label><textarea placeholder="例：DI 2系統(L/R)希望、ステレオ出力 等"></textarea></div>
+<div class="detail-box"><label>【Vocal】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
+<div class="detail-box"><label>【Guitar 1】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
+<div class="detail-box"><label>【Guitar 2】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
+<div class="detail-box"><label>【Bass】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
+<div class="detail-box"><label>【Drums】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
+<div class="detail-box"><label>【Keyboard / その他】</label><textarea placeholder="メモ・要望などを入力"></textarea></div>
 </div></div>
 <div class="actions"><button class="btn" onclick="window.print()">📄 PDF保存 / 印刷</button></div></div></div>
 <script>
 const stg=document.getElementById('stg');
 function add(t,c,shape){
-const div=document.createElement('div');div.className='placed-item';div.style.left='180px';div.style.top='150px';
+const div=document.createElement('div');div.className='placed-item';
+/* 初期配置を常に幅700pxのステージの中央付近（横320px、縦150px）に完全固定 */
+div.style.left='320px';div.style.top='150px';
 const w=document.createElement('div');w.className='icon-w';const i=document.createElement('div');i.className='icon '+shape;let currentRotation=0;
 if(shape==='circle'||shape==='rect-black'||shape==='arrow-symbol'||shape==='text-only'){i.style.backgroundColor=(shape==='circle'||shape==='rect-black'?c:'transparent');i.textContent=(shape==='arrow-symbol'?'➡':t);}
 else if(shape==='rect-white'){i.style.borderColor=c;i.style.color=c;i.textContent=t;}
@@ -83,8 +89,6 @@ const eBtn=document.createElement('div');eBtn.className='edt';eBtn.textContent='
 eBtn.onclick=(e)=>{e.stopPropagation();const newTxt=prompt('機材名やテキストを入力してください：',i.textContent);if(newTxt!==null&&newTxt.trim()!==""){i.textContent=newTxt;}};
 w.appendChild(eBtn);
 }
-
-/* ★★★ ここからサイズを楽器ごとに自動調整する処理 ★★★ */
 if(t==='Dr'){
 i.style.width='90px';i.style.height='48px';i.style.fontSize='14px';i.style.borderWidth='4px';
 }else if(t==='Gt1'||t==='Gt2'||t==='Ba'){
@@ -92,8 +96,6 @@ i.style.width='75px';i.style.height='40px';i.style.fontSize='13px';i.style.borde
 }else if(t==='Key'){
 i.style.width='75px';i.style.height='32px';i.style.fontSize='12px';i.style.borderWidth='3px';
 }
-/* ★★★ ここまで ★★★ */
-
 w.appendChild(i);w.appendChild(d);div.appendChild(w);stg.appendChild(div);
 let drag=false,sx,sy;
 function start(e){if(e.target.className==='del'||e.target.className==='rot'||e.target.className==='edt')return;drag=true;const cv=e.touches?e.touches:e;sx=cv.clientX-div.offsetLeft;sy=cv.clientY-div.offsetTop;div.style.zIndex=1000;}
@@ -105,4 +107,3 @@ div.addEventListener('touchmove',(e)=>{if(drag){e.preventDefault();move(e);}},{p
 div.addEventListener('touchend',end);
 }
 </script></body></html>
-
